@@ -15,7 +15,8 @@ class interval
          */
         interval(double min, double max)
         {
-            //TODO
+            this->min = min;
+            this->max = max;
         }
 
         /**
@@ -23,7 +24,7 @@ class interval
          */
         double size() const
         {
-            //TODO
+            return max - min;
         }
 
         /**
@@ -35,7 +36,7 @@ class interval
          */
         bool contains(double x) const
         {
-            //TODO
+                return x >= min && x <= max;
         }
 
         bool surrounds(double x) const 
@@ -48,7 +49,14 @@ class interval
          */
         double clamp(double x) const
         {
-            //TODO
+            if(x > max){
+                return max;
+            }
+            if(x < min){
+                return min;
+            }
+            return x;
+
         }
 
         static const interval empty, universe;
