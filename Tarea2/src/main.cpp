@@ -16,8 +16,11 @@ const char* vertexShaderSource = R"(
     void main()
     {
         //TODO
+        gl_Position = vec4(aPos, 1.0);
+        vertexColor = aColor;
     }
 )";
+
 
 // Fragment Shader (GLSL 4.10)
 const char* fragmentShaderSource = R"(
@@ -28,9 +31,10 @@ const char* fragmentShaderSource = R"(
     void main()
     {
         //TODO
+        FragColor = vec4(vertexColor, 1.0);
     }
 )";
-
+ 
 /**
  * @brief Estructura para almacenar los valores x,y de un punto.
  */
@@ -60,16 +64,40 @@ void generateSierpinski(int n, Point a, Point b, Point c, std::vector<float>& ve
         // TODO
         // Se generan los tres colores aleatorios (entre 0 y 1)
 
+        float R =static_cast<float>(std::rand()) / RAND_MAX;
+        float G = static_cast<float>(std::rand()) / RAND_MAX;
+        float B = static_cast<float>(std::rand()) / RAND_MAX;
+        
         // Se guarda el primer vértice
 
-
+            vertices.push_back(a.x);
+            vertices.push_back(a.y);
+            vertices.push_back(0.0f);
+            vertices.push_back(R);
+            vertices.push_back(G);
+            vertices.push_back(B);
+        
         // Se guarda el segundo vértice
+
+            vertices.push_back(b.x);
+            vertices.push_back(b.y);
+            vertices.push_back(0.0f);
+            vertices.push_back(R);
+            vertices.push_back(G);
+            vertices.push_back(B);
 
         // Se guarda el tercer vértice
 
-
-        return;
-    }
+            vertices.push_back(c.x);
+            vertices.push_back(c.y);
+            vertices.push_back(0.0f);
+            vertices.push_back(R);
+            vertices.push_back(G);
+            vertices.push_back(B);
+        
+            return;
+        }
+    
 
     // Calculamos los puntos medios
     Point midAB = getMidpoint(a, b);
@@ -196,11 +224,11 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
     //TODO
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, //TODO , //TODO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0); //TODO
     glEnableVertexAttribArray(0);
 
     //TODO
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, //TODO, //TODO);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float))); //TODO, //TODO
     glEnableVertexAttribArray(1);
 
     glBindVertexArray(0);
@@ -221,7 +249,7 @@ int main()
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         //TODO
-        glDrawArrays(GL_TRIANGLES, 0, //TODO);
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size()/6); //TODO
 
         // Swap buffers and poll IO events
         glfwSwapBuffers(window);
